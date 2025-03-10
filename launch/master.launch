@@ -1,0 +1,32 @@
+<launch>
+    <!-- ZadarLabs ZPrime Radar -->
+    <include file="$(find zadarlabs_arm_ros1)/launch/zprime.launch">
+        <arg name="run_rviz" value="false"/> 
+        <arg name="radar_mode" value="1"/> <!-- This variable adjusts mode of zprime -->
+        <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
+    </include>
+   
+    <!-- MAV Sensors: Contains baro, imu, camera and radar --> 
+    <!-- Baro: bmp390 -->
+    <!-- IMU: bmi088 -->
+    <!-- Radar: awr1843aop -->
+    <include file="$(find mav_sensors_ros)/launch/sensors.launch">
+        <arg name="baro_on" value="false"/> <!-- Disable baro -->
+        <arg name="cam_on" value="false"/> <!-- Disable camera -->
+        <arg name="radar_on" value="true"/> <!-- Enable radar -->
+        <arg name="radar_trigger" value="false"/> <!-- Disable radar trigger -->
+        <arg name="imu_on" value="true"/> <!-- Enable imu -->
+        <arg name="imu_filter_on" value="true"/> <!-- Enable imu filter(rospackage magwick) -->
+    </include>
+
+    <!-- VICON room driver setup -->
+    
+
+    <!-- ROS Bag recording using record_bag.sh -->
+    <arg name="record" default="false"/>
+    <arg name="bag_name" default="my_bag"/>
+    <group if="$(arg record)">
+        <node pkg="radar_rig_sensor_fusion" type="record_bag.sh" name="rosbag_record" 
+        args="$(find radar_rig_sensor_fusion)/bag/$(arg bag_name) $(arg bag_name)" output="screen"/>
+    </group>
+</launch>
