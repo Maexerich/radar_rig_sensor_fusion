@@ -50,33 +50,17 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <!-- Build dependencies -->
-  <build_depend>lpp</build_depend>
-  <build_depend>mav_sensors_ros</build_depend>
-  <build_depend>omav_sensors</build_depend>
-  <build_depend>ros_vrpn_client</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>vrp_catkin</build_depend>
-  <build_depend>zadarlabs_arm_ros1</build_depend>
-  <build_export_depend>lpp</build_export_depend>
-  <build_export_depend>mav_sensors_ros</build_export_depend>
-  <build_export_depend>omav_sensors</build_export_depend>
-  <build_export_depend>ros_vrpn_client</build_export_depend>
-  <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>vrp_catkin</build_export_depend>
-  <build_export_depend>zadarlabs_arm_ros1</build_export_depend>
-
-  <!-- Execution dependencies -->
-  <exec_depend>lpp</exec_depend>
-  <exec_depend>mav_sensors_ros</exec_depend>
-  <exec_depend>omav_sensors</exec_depend>
-  <exec_depend>ros_vrpn_client</exec_depend>
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>rospy</exec_depend>
-  <exec_depend>vrp_catkin</exec_depend>
-  <exec_depend>zadarlabs_arm_ros1</exec_depend>
+  <!-- Dependencies -->
+  <depend>catkin_simple</depend>
+  <depend>glog_catkin</depend>
+  <depend>lpp</depend>
+  <depend>mav_sensors_ros</depend>
+  <depend>ros_vrpn_client</depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>vrpn_catkin</depend>
+  <depend>zadarlabs_arm_ros1</depend>
+  <depend>mav_sensors_drivers</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -10,12 +10,14 @@ project(radar_rig_sensor_fusion)
 find_package(catkin REQUIRED COMPONENTS
   lpp
   mav_sensors_ros
-  omav_sensors
+  mav_sensors_drivers
   ros_vrpn_client
   roscpp
   rospy
-  vrp_catkin
+  vrpn_catkin
   zadarlabs_arm_ros1
+  catkin_simple
+  glog_catkin
 )
 
 ## System dependencies are found with CMake's conventions

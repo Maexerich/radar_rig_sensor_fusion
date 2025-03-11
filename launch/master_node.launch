@@ -1,0 +1,48 @@
+<launch>
+    <!-- Does not work, as executables in mav_sensors_demo are partially hard-coded! -->
+    <!-- Use Nodelet implementation -->
+
+    <!-- Radar: TIAWR1843AOP -->
+    <node pkg="mav_sensors_demo" type="mav_sensors_demo_xwr18xx_mmw_demo" name="radarTI" output="screen">
+        <param name="path_cfg" value="/dev/ttyUSB0"/>
+        <param name="path_data" value="/dev/ttyUSB1"/>
+        <param name="frame_id" value="awr1843aop"/>
+        <param name="poll_rate" value="8.0"/>
+        <param name="radar_cfg" value="$(find mav_sensors_demo)/cfg/radar/xwr18xx_AOP_profile_best_velocity_resolution.cfg"/>
+        <param name="trigger" type="string" value="false"/> <!-- This enables measurement to be triggered from exposed pin on sensor board. -->
+        <param name="trigger_delay" type="string" value="500"/>
+        <param name="trigger_gpio" type="string" value="389"/> <!-- Only used if trigger is true -->
+        <param name="trigger_gpio_name" type="string" value="PG.06"/> <!-- Only used if trigger is true -->
+    </node>
+
+    <!-- Radar: ZadarLabs ZPrime (more parameters can be found in zprime.launch)-->
+    <include file="$(find zadarlabs_arm_ros1)/launch/zprime.launch">
+        <arg name="run_rviz" value="false"/> 
+        <arg name="radar_mode" value="1"/> <!-- This variable adjusts mode of zprime -->
+        <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
+    </include>
+
+    <!-- IMU: BMI088 -->
+    <node pkg="mav_sensors_demo" type="mav_sensors_demo_bmi088_demo" name="imu" output="screen">
+        <param name="path_acc" value="/dev/spidev0.0"/>
+        <param name="path_gyro" value="/dev/spidev0.1"/>
+        <param name="frame_id" value="bmi088"/>
+        <param name="poll_rate" value="500.0"/>
+        <param name="bias_samples" value="2000"/>
+    </node>
+
+    <!-- IMU Filter: Madgwick -->
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter" output="screen">
+        <param name="publish_tf" value="false"/>
+        <param name="use_mag" value="false"/>
+        <remap from="imu/data_raw" to="/imu/data"/>
+    </node>
+
+    <arg name="record" default="false"/>
+    <arg name="bag_name" default="my_bag"/>
+    <group if="$(arg record)">
+        <node pkg="radar_rig_sensor_fusion" type="record_bag.sh" name="rosbag_record" 
+        args="$(find radar_rig_sensor_fusion)/bag/$(arg bag_name) $(arg bag_name)" output="screen"/>
+    </group>
+
+</launch>
