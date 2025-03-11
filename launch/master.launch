@@ -1,7 +1,58 @@
 <launch>
-    <!-- Use Nodelet implementation -->
-    <include file="$(find radar_rig_sensor_fusion)/launch/master_nodelet.launch"> </include>
+    <!-- Nodelet -->
+    <node pkg="nodelet" type="nodelet" name="sensors_nodelet_manager" args="manager" cwd="node" output="screen" if="True"/>
 
-    <!-- Uing Nodes requires nodelets to be re-written to work as nodes within the mav_sensors_ros repository. -->
-    <!-- <include file="$(find radar_rig_sensor_fusion)/launch/master_node.launch"> </include> -->
+    <!-- Radar: TIAWR1843AOP -->
+    <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet sensors_nodelet_manager" output="screen">
+        <param name="path_cfg" value="/dev/ttyUSB0"/>
+        <param name="path_data" value="/dev/ttyUSB1"/>
+        <param name="frame_id" value="awr1843aop"/>
+        <param name="poll_rate" value="8.0"/>
+        <param name="radar_cfg" value="$(find radar_rig_sensor_fusion)/cfg/radar/xwr18xx_AOP_profile_best_velocity_resolution.cfg"/>
+        <param name="trigger" type="string" value="false"/>
+        <param name="trigger_delay" type="string" value="500"/>
+        <param name="trigger_gpio" type="string" value="389"/>
+        <param name="trigger_gpio_name" type="string" value="PG.06"/>
+    </node>
+    
+    <!-- IMU: -->
+    <node pkg="nodelet" type="nodelet" name="imu" args="load mav_sensors_ros::ImuNodelet sensors_nodelet_manager" output="screen" if="true">
+        <rosparam file="$(find mav_sensors_ros)/cfg/imu.yaml" />
+        <param name="path_acc" value="/dev/spidev0.0"/>
+        <param name="path_gyro" value="/dev/spidev0.1"/>
+        <param name="frame_id" value="bmi088"/>
+        <param name="poll_rate" value="500.0"/>
+        <param name="bias_samples" value="2000"/>
+    </node>
+
+    <!-- IMU Filter: Madgwick -->
+    <node pkg="nodelet" type="nodelet" name="ImuFilterNodelet" args="load imu_filter_madgwick/ImuFilterNodelet sensors_nodelet_manager" output="screen">
+        <param name="publish_tf" value="false"/>
+        <param name="use_mag" value="false"/>
+    </node>
+
+    <!-- Radar: ZadarLabs ZPrime (Node implementation. More parameters can be found in zprime.launch)-->
+    <include file="$(find zadarlabs_arm_ros1)/launch/zprime.launch">
+        <arg name="run_rviz" value="false"/> 
+        <arg name="radar_mode" value="1"/> <!-- This variable adjusts mode of zprime -->
+        <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
+    </include>
+
+    <!-- VICON tracking -->
+    <arg name="object_name" default="radar" />
+    <node name="radar_vrpn_client" type="ros_vrpn_client" pkg="ros_vrpn_client" output="screen">
+        <param name="vrpn_server_ip" value="192.168.1.100" />
+        <param name="object_name" value="$(arg object_name)" />
+    </node>
+
+    <!-- Frame Transformations -->
+
+    <!-- ROS Bag recording -->
+    <arg name="record" default="false"/>
+    <arg name="bag_name" default="my_bag"/>
+    <group if="$(arg record)">
+        <node pkg="radar_rig_sensor_fusion" type="record_bag.sh" name="rosbag_record" 
+        args="$(find radar_rig_sensor_fusion)/bag/$(arg bag_name) $(arg bag_name)" output="screen"/>
+    </group>
+
 </launch>
