@@ -38,6 +38,12 @@
         <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
     </include>
 
+    <!-- VICON tracking -->
+    <arg name="object_name" default="radar" />
+    <node name="radar_vrpn_client" type="ros_vrpn_client" pk="ros_vrpn_client" output="screen">
+        <param name="vrpn_server_ip" value="192.168.1.100" />
+        <param name="object_name" value="$(arg object_name)" />
+    </node>
 
     <!-- ROS Bag recording -->
     <arg name="record" default="false"/>
