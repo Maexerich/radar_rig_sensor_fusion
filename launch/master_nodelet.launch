@@ -40,10 +40,12 @@
 
     <!-- VICON tracking -->
     <arg name="object_name" default="radar" />
-    <node name="radar_vrpn_client" type="ros_vrpn_client" pk="ros_vrpn_client" output="screen">
+    <node name="radar_vrpn_client" type="ros_vrpn_client" pkg="ros_vrpn_client" output="screen">
         <param name="vrpn_server_ip" value="192.168.1.100" />
         <param name="object_name" value="$(arg object_name)" />
     </node>
+
+    <!-- Frame Transformations -->
 
     <!-- ROS Bag recording -->
     <arg name="record" default="false"/>
