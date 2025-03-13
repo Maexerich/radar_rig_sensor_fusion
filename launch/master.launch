@@ -14,6 +14,7 @@
         <param name="trigger_gpio" type="string" value="389"/>
         <param name="trigger_gpio_name" type="string" value="PG.06"/>
         <!-- flip_z (boolean): Flipping z-axis to make coordinate frame right-handed. -->
+        <!-- ATTENTION: if set to false, then tf2_ros transform between /radar and /awr1843aop will be incorrect! -->
         <param name="flip_z" type="bool" value="true"/>
     </node>
     
@@ -50,7 +51,9 @@
 
     <!-- Frame Transformations -->
     <!-- Radar (from vicon) to IMU frame -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 0.5 0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
+    <group if="$(arg flip_z)">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 0.5 0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
+    </group>
     <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarZadarlabs" args="0 0.1018 0 0 -0.71 0 0.71 /radar /zadar" output="screen"/>
 
     <!-- ROS Bag recording -->
