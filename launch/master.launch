@@ -13,6 +13,8 @@
         <param name="trigger_delay" type="string" value="500"/>
         <param name="trigger_gpio" type="string" value="389"/>
         <param name="trigger_gpio_name" type="string" value="PG.06"/>
+        <!-- flip_y (boolean): Flips y-axis, makes coordinate frame right-handed. -->
+        <param name="flip_y" value="true"/>
     </node>
     
     <!-- IMU: -->
@@ -36,16 +38,20 @@
         <arg name="run_rviz" value="false"/> 
         <arg name="radar_mode" value="1"/> <!-- This variable adjusts mode of zprime -->
         <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
+        <param name="use_sim_time" value="true"/>
     </include>
 
     <!-- VICON tracking -->
-    <arg name="object_name" default="radar" />
-    <node name="radar_vrpn_client" type="ros_vrpn_client" pkg="ros_vrpn_client" output="screen">
-        <param name="vrpn_server_ip" value="192.168.1.100" />
-        <param name="object_name" value="$(arg object_name)" />
-    </node>
+    <include file="$(find ros_vrpn_client)/launch/asl_vicon.launch">
+  	<arg name="object_name" value="radar" />
+    <param name="use_sim_time" value="true"/>
+    </include>
+
 
     <!-- Frame Transformations -->
+    <!-- Radar (from vicon) to IMU frame -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 -0.5 -0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarZadarlabs" args="0 0.1018 0 0 -0.71 0 0.71 /radar /zadar" output="screen"/>
 
     <!-- ROS Bag recording -->
     <arg name="record" default="false"/>
