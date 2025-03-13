@@ -13,6 +13,8 @@
         <param name="trigger_delay" type="string" value="500"/>
         <param name="trigger_gpio" type="string" value="389"/>
         <param name="trigger_gpio_name" type="string" value="PG.06"/>
+        <!-- flip_z (boolean): Flipping z-axis to make coordinate frame right-handed. -->
+        <param name="flip_z" type="bool" value="true"/>
     </node>
     
     <!-- IMU: -->

@@ -13,9 +13,9 @@
         <param name="trigger_delay" type="string" value="500"/>
         <param name="trigger_gpio" type="string" value="389"/>
         <param name="trigger_gpio_name" type="string" value="PG.06"/>
-        <!-- flip_y (boolean): Flips direction of y-axis. If not defined in launch file, default value 'false' is used.
-                               Flipping y-axis makes coordinate system right-handed. -->
-        <param name="flip_y" type="bool" value="true"/>
+        <!-- flip_z (boolean): Flips direction of z-axis. If not defined in launch file, default value 'false' is used.
+                               Flipping z-axis makes coordinate system right-handed. -->
+        <param name="flip_z" type="bool" value="true"/>
     </node>
 
     <!-- Static frame publisher -->
