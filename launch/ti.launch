@@ -24,6 +24,6 @@
 
     <!-- RVIZ of TI sensor -->
     <group if="true">
-        <node type="rviz" name="rviz" pkg="rviz" args="-d $(find radar_rig_sensor_fusion)/cfg/ti_rviz.rviz" output="screen"/>
+        <node type="rviz" name="rviz" pkg="rviz" args="-d $(find radar_rig_sensor_fusion)/cfg/rviz/ti.rviz" output="screen"/>
     </group>
 </launch>
