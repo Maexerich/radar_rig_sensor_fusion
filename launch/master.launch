@@ -50,7 +50,7 @@
 
     <!-- Frame Transformations -->
     <!-- Radar (from vicon) to IMU frame -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 -0.5 -0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 0.5 0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
     <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarZadarlabs" args="0 0.1018 0 0 -0.71 0 0.71 /radar /zadar" output="screen"/>
 
     <!-- ROS Bag recording -->
