@@ -1,6 +1,14 @@
 <launch>
-    <!-- <param name="use_sim_time" value="false"/> -->
-    
+    <!-- Params -->
+    <arg name="bag_file" default="$(env HOME)/Downloads/RadarBag_TI_IMU/small_2025-03-19-15-59-50.bag" />
+    <arg name="record" default="false"/>
+    <arg name="record_dir" default="$(env HOME)/Downloads/RadarBag_TI_IMU/"/>
+    <arg name="record_name" default="RIO"/>
+
+    <!-- Play ROS bag -->
+    <param name="use_sim_time" value="false"/>
+    <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg bag_file) --clock" output="screen" />
+
     <!-- ### Launch RIO ### -->
     <arg name="nodelet_manager_on" default="true" />
     <arg name="nodelet_manager_name" default="rio_nodelet_manager" />

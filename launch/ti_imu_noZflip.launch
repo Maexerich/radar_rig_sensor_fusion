@@ -6,7 +6,8 @@
     <!-- flip_z (boolean): Flipping z-axis to make coordinate frame right-handed. -->
     <!-- ATTENTION: if set to false, then tf2_ros transform between /radar and /awr1843aop will be incorrect! -->
     <arg name="flip_z" value="false"/>
-    <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet sensors_nodelet_manager" output="screen">
+    <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet sensors_nodelet_manager" output="screen"> 
+    <!-- launch-prefix="bash -c 'sleep 5.0; $0 $@' "> -->
         <param name="path_cfg" value="/dev/ttyUSB0"/>
         <param name="path_data" value="/dev/ttyUSB1"/>
         <param name="frame_id" value="awr1843aop"/>
