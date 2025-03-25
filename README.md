@@ -3,7 +3,7 @@
     <img src="images/PXL_20250218_163010295.jpg" width="45%" />
 </p>
 
-# Radar Rig for data collection to compare radar sensors TIAWR1843AOP with ZadarLabs ZPrime
+# Radar Rig with TIAWR1843AOP and ZadarLabs ZPrime
 _Nvidia Jetson credentials: username/password is radar/radar and can be found at 10.10.10.241 in the flynet-an network._
 
 This repository provides an overview of the test rig developed. It is a ROS package, including different launch files to take different measurements.
@@ -14,6 +14,21 @@ The radar rig shown in the picture has the following sensors;
 - Radar: ZadarLabs ZPrime
 - IMU: BMI088
 - (Markers for VICON system)
+
+## Contents of repository
+- [Coordinate Frames](#coordinate-frames)
+- [Usage](#usage)
+- [Installation](#installation)
+- [Launch files](#launch-files)
+- [Notes on different sensors](#notes-on-different-sensors)
+- [Datasets](#datasets)
+- [Evaluation](#evaluation)
+
+# Coordinate Frames
+The following image depicts the coordinate frames of the IMU, TI and ZadarLabs radar sensor.
+This is for the configuration `z_flip = true`.
+
+% Add origin of VICON frame too! %
 
 # Usage
 Either run launch files through the terminal as familiar, or use the web-interface.
@@ -43,7 +58,7 @@ The dependencies are split depending on what should be done with the test rig.
 - https://github.com/ethz-asl/lpp.git
 - https://github.com/ethz-asl/mav_sensors_ros.git
 - https://github.com/ethz-asl/mav_sensors.git
-- https://github.com/maexerich/zadarlabs_arm_ros1.git
+- https://github.com/maexerich/zadarlabs_arm_ros1.git (follow installation instructions)
 - catkin_simple
 - glog_catkin
 - https://github.com/ethz-asl/ros_vrpn_client.git
@@ -81,9 +96,32 @@ The TI sensor outputs data in a Left-Handed coordinate system. A new variable `f
 For details on implementation, refer to ROS package [zadarlabs_arm_ros1](https://github.com/Maexerich/zadarlabs_arm_ros1).
 That repository contains more than just a 'ROS-interface', but also documentation, drivers, and email conversations with ZadarLabs.
 
-# Coordinate Frames
-The following image depicts the coordinate frames of the IMU, TI and ZadarLabs radar sensor.
-This is for the configuration `z_flip = true`.
+## IMU: Initial Setup on Jetson
+Connect via SPI interface. Then configure on the jetson;
+```bash
+cd /opt/nvidia/jetson-io
+sudo ./jetson-io.py
+```
+Enable SPI and reboot.
+To ensure SPI is loaded, use the following command.
+```bash
+sudo modprobe spidev
+```
+To automate this (reboot-consistency);
+```bash
+sudo nano /etc/modules-load.d/spidev.conf # Create this file
+# Add the following line to the file
+spidev
+```
+
+## TI-AWR1843AOP: Initial Setup on Jetson
+Must configure tty-USB permissions accordingly;
+```bash
+sudo chmod 666 /dev/ttyUSB0 /dev/ttyUSB1
+```
+
+## ZadarLabs ZPrime: Initial Setup on Jetson
+Follow guide at [ZadarLabs ARM ROS1](https://github.com/Maexerich/zadarlabs_arm_ros1).
 
 # Datasets
 % TODO %
