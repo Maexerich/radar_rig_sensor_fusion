@@ -1,0 +1,40 @@
+<launch>
+    <!-- Params -->
+    <arg name="bag_file" default="$(env HOME)/Downloads/RadarBag_TI_IMU/small_2025-03-19-15-59-50.bag" />
+    <arg name="record" default="false"/>
+    <arg name="record_dir" default="$(env HOME)/Downloads/RadarBag_TI_IMU/"/>
+    <arg name="record_name" default="RIO"/>
+
+    <!-- Play ROS bag -->
+    <param name="use_sim_time" value="false"/>
+    <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg bag_file) --clock" output="screen" />
+
+    <!-- ### Launch RIO ### -->
+    <arg name="nodelet_manager_on" default="true" />
+    <arg name="nodelet_manager_name" default="rio_nodelet_manager" />
+
+    <arg name="rio_queue_size" default="1" />
+    <arg name="rio_odom_frame_id" default="radar" />
+    <arg name="radar_frame_id" default="awr1843aop" />
+    <arg name="cam_frame_id" default="cam" />
+    <arg name="imu_frame_id" default="bmi088" />
+
+    <arg name="visualize" default="false"/>
+
+    <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)" args="manager" cwd="node" output="screen" if="$(arg nodelet_manager_on)"/>
+
+    <node pkg="nodelet" type="nodelet" name="rio" args="load rio::RioNodelet $(arg nodelet_manager_name)" output="screen">
+        <rosparam file="$(find rio)/cfg/rio.yaml" />
+        <param name="queue_size" value="$(arg rio_queue_size)"/>
+        <param name="odom_frame_id" value="$(arg rio_odom_frame_id)"/>
+    </node>
+
+    <!-- Rigid Body transformations -->
+    <node name="imu_to_radar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.122 0.000 -0.025 0.67620958 0.67620958 -0.20673802 -0.20673802 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
+
+    <group if="$(arg visualize)">
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rio)/cfg/rviz.rviz"/>
+        <node pkg="rqt_multiplot" type="rqt_multiplot" name="rqt_multiplot" args="--multiplot-config $(find rio)/cfg/rio_multiplot.xml --multiplot-run-all"/>
+    </group>
+
+</launch>
