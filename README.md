@@ -66,7 +66,7 @@ The dependencies are split depending on what should be done with the test rig.
 
 ## Additional dependencies to run RIO
 - https://github.com/rikba/gtsam_catkin.git (will take a long time to build when running `catkin build`)
-- https://github.com/ethz-asl/rio.git
+- https://github.com/ethz-asl/rio.git (branch: demo/smooth_flight_tuned. Alternatively go here, where I have copied and added the correct folder only: https://github.com/Maexerich/rio)
 
 
 # Launch files
