@@ -38,8 +38,8 @@
     <!-- Radar: ZadarLabs ZPrime (Node implementation. More parameters can be found in zprime.launch)-->
     <include file="$(find zadarlabs_arm_ros1)/launch/zprime.launch">
         <arg name="run_rviz" value="false"/> 
-        <arg name="radar_mode" value="1"/> <!-- This variable adjusts mode of zprime -->
-        <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
+        <arg name="radar_mode" value="1"/>
+        <arg name="radar_serial_number" value="0225CCW002"/> 
         <param name="use_sim_time" value="true"/>
     </include>
 
@@ -56,6 +56,7 @@
         <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 0.5 0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
     </group>
     <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarZadarlabs" args="0 0.1018 0 0 -0.71 0 0.71 /radar /zadar" output="screen"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_IMU" args="0 0 0 0 0 0 1 /radar /bmi088" output="screen"/>
 
     <!-- ROS Bag recording -->
     <arg name="record" default="false"/>
@@ -67,7 +68,7 @@
 
     <!-- Visualize RVIZ -->
     <group if="false">
-        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find radar_rig_sensor_fusion)/rviz/master.rviz" output="screen"/>
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find radar_rig_sensor_fusion)/cfg/rviz/master.rviz" output="screen"/>
     </group>
 
 </launch>
