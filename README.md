@@ -15,6 +15,8 @@ The radar rig shown in the picture has the following sensors;
 - IMU: BMI088
 - (Markers for VICON system)
 
+The CAD Model is not added to this repository due to large file size. It on [Google Drive](https://drive.google.com/drive/folders/1LmM_rV13pX58VYUtpY1OkgPbWoKuzgi0?usp=sharing).
+
 ## Contents of repository
 - [Coordinate Frames](#coordinate-frames)
 - [Usage](#usage)
@@ -26,9 +28,10 @@ The radar rig shown in the picture has the following sensors;
 
 # Coordinate Frames
 The following image depicts the coordinate frames of the IMU, TI and ZadarLabs radar sensor.
-This is for the configuration `z_flip = true`.
+This is for the configuration `flip_z = true`.
 
-% Add origin of VICON frame too! %
+The vicon room is set up to track the added markers. The coordinate frame it tracks coincides with the IMU coordinate frame.
+![](images/TechnicalDrawing_wCoordFrames_clean.svg)
 
 # Usage
 Either run launch files through the terminal as familiar, or use the web-interface.
