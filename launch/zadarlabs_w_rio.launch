@@ -30,7 +30,7 @@
     <arg name="use_vicon" default="false"/>
     <group if="$(arg use_vicon)">
         <include file="$(find ros_vrpn_client)/launch/asl_vicon.launch">
-            <arg name="object_name" value="radar" />
+            <arg name="object_name" value="radar"/>
             <param name="use_sim_time" value="true"/>
         </include>
     </group>
