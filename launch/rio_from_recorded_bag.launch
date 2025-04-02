@@ -1,9 +1,8 @@
 <launch>
     <!-- Params -->
-    <arg name="bag_file" default="$(env HOME)/Downloads/RadarBag_TI_IMU/small_2025-03-19-15-59-50.bag" />
+    <arg name="filename" default="small_2025-03-19-15-59-50" />
+    <arg name="bag_file" default="$(env HOME)/Downloads/RadarBag_TI_IMU/$(arg filename).bag" />
     <arg name="record" default="false"/>
-    <arg name="record_dir" default="$(env HOME)/Downloads/RadarBag_TI_IMU/"/>
-    <arg name="record_name" default="RIO"/>
 
     <!-- Play ROS bag -->
     <param name="use_sim_time" value="false"/>
@@ -30,11 +29,19 @@
     </node>
 
     <!-- Rigid Body transformations -->
-    <node name="imu_to_radar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.122 0.000 -0.025 0.67620958 0.67620958 -0.20673802 -0.20673802 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
+    <node name="imu_to_TIradar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.0 -0.1018 0.0 0.5 0.5 0.5 0.5 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
 
     <group if="$(arg visualize)">
         <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rio)/cfg/rviz.rviz"/>
         <node pkg="rqt_multiplot" type="rqt_multiplot" name="rqt_multiplot" args="--multiplot-config $(find rio)/cfg/rio_multiplot.xml --multiplot-run-all"/>
     </group>
+
+    <!-- ROS Bag recording -->
+    <arg name="bag_name" default="modRIO_$(arg filename)"/>
+    <group if="$(arg record)">
+        <node pkg="radar_rig_sensor_fusion" type="record_bag.sh" name="rosbag_record" 
+        args="$(find radar_rig_sensor_fusion)/bag/$(arg bag_name) $(arg bag_name)" output="screen"/>
+    </group>
+
 
 </launch>

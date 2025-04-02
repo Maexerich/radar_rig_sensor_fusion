@@ -1,6 +1,6 @@
 <launch>
     <!-- <param name="use_sim_time" value="false"/> -->
-    
+    --------- Has not been updated! Use the 'rio_from_recorded_bag.launch' to update this file accordingly
     <!-- ### Launch RIO ### -->
     <arg name="nodelet_manager_on" default="true" />
     <arg name="nodelet_manager_name" default="rio_nodelet_manager" />
