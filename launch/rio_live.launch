@@ -5,8 +5,9 @@
     <!-- Radar: TIAWR1843AOP -->
     <!-- flip_z (boolean): Flipping z-axis to make coordinate frame right-handed. -->
     <!-- ATTENTION: if set to false, then tf2_ros transform between /radar and /awr1843aop will be incorrect! -->
-    <arg name="flip_z" value="true"/>
-    <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet sensors_nodelet_manager" output="screen">
+    <arg name="flip_z" value="false"/>
+    <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet sensors_nodelet_manager" output="screen"> 
+    <!-- launch-prefix="bash -c 'sleep 5.0; $0 $@' "> -->
         <param name="path_cfg" value="/dev/ttyUSB0"/>
         <param name="path_data" value="/dev/ttyUSB1"/>
         <param name="frame_id" value="awr1843aop"/>
@@ -18,8 +19,7 @@
         <param name="trigger_gpio_name" type="string" value="PG.06"/>
         <param name="flip_z" value="($arg flip_z)"/>
     </node>
-
-
+    
     <!-- IMU: -->
     <node pkg="nodelet" type="nodelet" name="imu" args="load mav_sensors_ros::ImuNodelet sensors_nodelet_manager" output="screen" if="true">
         <rosparam file="$(find mav_sensors_ros)/cfg/imu.yaml" />
@@ -36,16 +36,8 @@
         <param name="use_mag" value="false"/>
     </node>
 
-    <!-- Radar: ZadarLabs ZPrime (Node implementation. More parameters can be found in zprime.launch)-->
-    <include file="$(find zadarlabs_arm_ros1)/launch/zprime.launch">
-        <arg name="run_rviz" value="false"/> 
-        <arg name="radar_mode" value="1"/> <!-- This variable adjusts mode of zprime -->
-        <arg name="radar_serial_number" value="0225CCW002"/> <!-- Serial number -->
-        <param name="use_sim_time" value="true"/>
-    </include>
-
     <!-- VICON tracking -->
-    <arg name="use_vicon" default="false"/>
+    <arg name="use_vicon" default="true"/>
     <group if="$(arg use_vicon)">
         <include file="$(find ros_vrpn_client)/launch/asl_vicon.launch">
             <arg name="object_name" value="radar" />
@@ -53,18 +45,13 @@
         </include>
     </group>
 
-    <!-- Frame Transformations -->
-    <!-- From VICON to ZadarLabs -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarZadarlabs" args="0 0.1018 0.0115 0.71 0 0.71 0.0 /radar /zadar" output="screen"/>
-
-    <!-- RIO -->
+    <!-- ### Launch RIO ### -->
     <arg name="nodelet_manager_on" default="true" />
     <arg name="nodelet_manager_name" default="rio_nodelet_manager" />
 
     <arg name="rio_queue_size" default="1" />
     <arg name="rio_odom_frame_id" default="radar" />
     <arg name="radar_frame_id" default="awr1843aop" />
-    <!-- <arg name="radar_frame_id" default="zadar" /> -->
     <arg name="cam_frame_id" default="cam" />
     <arg name="imu_frame_id" default="bmi088" />
 
@@ -76,11 +63,16 @@
         <rosparam file="$(find rio)/cfg/rio.yaml" />
         <param name="queue_size" value="$(arg rio_queue_size)"/>
         <param name="odom_frame_id" value="$(arg rio_odom_frame_id)"/>
-        <!-- <remap from="/radar/cfar_detections" to="/zadar/scan0"/> -->
     </node>
 
     <!-- Rigid Body transformations -->
-    <node name="imu_to_TIradar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.0 0.1018 0.0115 0.71 0 0.71 0.0 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
+    <node name="imu_to_TIradar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.0 -0.1018 0.0 0.5 0.5 0.5 0.5 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
+
+    <!-- Frame Transformations -->
+    <!-- Radar (from vicon) to IMU frame -->
+    <group if="$(arg flip_z)">
+        <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 0.5 0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
+    </group>
 
     <!-- ROS Bag recording -->
     <arg name="record" default="false"/>
