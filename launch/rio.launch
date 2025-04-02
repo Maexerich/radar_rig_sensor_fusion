@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 <launch>
     <!-- <param name="use_sim_time" value="false"/> -->
     --------- Has not been updated! Use the 'rio_from_recorded_bag.launch' to update this file accordingly
+=======
+<launch>    
+>>>>>>> 9cbb883bafeaea56c2a161da7f23ba7f7ae96cf9
     <!-- ### Launch RIO ### -->
     <arg name="nodelet_manager_on" default="true" />
     <arg name="nodelet_manager_name" default="rio_nodelet_manager" />
@@ -22,11 +26,10 @@
     </node>
 
     <!-- Rigid Body transformations -->
-    <node name="imu_to_radar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.122 0.000 -0.025 0.67620958 0.67620958 -0.20673802 -0.20673802 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
+    <node name="imu_to_radar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0 -0.1018 0 0.5 0.5 0.5 0.5 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
 
     <group if="$(arg visualize)">
         <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rio)/cfg/rviz.rviz"/>
         <node pkg="rqt_multiplot" type="rqt_multiplot" name="rqt_multiplot" args="--multiplot-config $(find rio)/cfg/rio_multiplot.xml --multiplot-run-all"/>
     </group>
-
 </launch>
