@@ -55,7 +55,7 @@
     <group if="$(arg flip_z)">
         <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarTI" args="0 -0.1018 0 0.5 0.5 0.5 0.5 /radar /awr1843aop" output="screen"/>
     </group>
-    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_radarZadarlabs" args="0 0.1018 0 0 -0.71 0 0.71 /radar /zadar" output="screen"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_Zadar" args="0.0 0.1018 0.0 0.71 0 0.71 0.0 /radar /zadar" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="radarRigOrigin_to_IMU" args="0 0 0 0 0 0 1 /radar /bmi088" output="screen"/>
 
     <!-- ROS Bag recording -->

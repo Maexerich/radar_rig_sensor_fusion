@@ -1,0 +1,18 @@
+<!-- Temporary launch file used to fix rigid body transforms of already recorded bags. First the incorrect transform must be stripped using 'rosbag filter'
+    The output can then be processed using this launch file. -->
+
+<launch>
+    <arg name="filename"/>
+    <arg name="bag_folder"/>
+    <arg name="path_absolute" default="$(find radar_rig_sensor_fusion)/bag/$(arg bag_folder)"/>
+
+    <include file="$(find radar_rig_sensor_fusion)/launch/transforms.launch" />
+
+    <param name="use_sim_time" value="true"/>
+    <node pkg="rosbag" type="play" name="bag_play" args="$(arg path_absolute)/$(arg filename) --clock" output="screen" />
+
+    <arg name="record" default="false"/>
+    <group if="$(arg record)">
+        <node name="rosbag_record" pkg="rosbag" type="record" args="-O $(arg path_absolute)/new_$(arg filename) -a" output="screen" />
+    </group>
+</launch>
