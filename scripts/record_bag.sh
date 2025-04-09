@@ -7,6 +7,12 @@ fi
 DIRECTORY=$1
 DESCRIPTOR=$2
 
+# Check if DESCRIPTOR is a path
+if [[ "$DESCRIPTOR" == */* ]]; then
+    # Extract the filename using the 'filename.sh' script
+    DESCRIPTOR=$(basename "$DESCRIPTOR")
+fi
+
 # Create the directory if it doesn't exist
 mkdir -p "$DIRECTORY"
 
