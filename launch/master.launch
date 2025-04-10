@@ -5,7 +5,7 @@
     <!-- Radar: TIAWR1843AOP -->
     <!-- flip_z (boolean): Flipping z-axis to make coordinate frame right-handed. -->
     <!-- ATTENTION: if set to false, then tf2_ros transform between /radar and /awr1843aop will be incorrect! -->
-    <arg name="flip_z" value="true"/>
+    <arg name="flip_z" default="true"/>
     <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet sensors_nodelet_manager" output="screen">
         <param name="path_cfg" value="/dev/ttyUSB0"/>
         <param name="path_data" value="/dev/ttyUSB1"/>
@@ -16,7 +16,7 @@
         <param name="trigger_delay" type="string" value="500"/>
         <param name="trigger_gpio" type="string" value="389"/>
         <param name="trigger_gpio_name" type="string" value="PG.06"/>
-        <param name="flip_z" value="($arg flip_z)"/>
+        <param name="flip_z" value="$(arg flip_z)"/>
     </node>
     
     <!-- IMU: -->
