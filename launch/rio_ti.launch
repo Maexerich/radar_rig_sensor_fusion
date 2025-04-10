@@ -7,7 +7,7 @@
     <arg name="save_name" default="my_bag"/>
     
     <!-- ### Play bag ### -->
-    <param name="use_sim_time" value="false"/>
+    <param name="use_sim_time" value="true"/>
     <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg path_to_bag) --clock" output="screen" />
     
     <!-- ### Launch RIO ### -->
@@ -25,6 +25,7 @@
         <rosparam file="$(find rio)/cfg/rio.yaml" />
         <param name="queue_size" value="$(arg rio_queue_size)"/>
         <param name="odom_frame_id" value="$(arg rio_odom_frame_id)"/>
+        <param name="radar_topic" value="/radar/cfar_detections"/>
     </node>
 
     <!-- Rigid Body transformations -->

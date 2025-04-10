@@ -5,9 +5,12 @@
     <arg name="zadar_radar" default="true"/>
     <arg name="record" default="false"/>
     <arg name="save_name" default="my_bag"/>
+
+    <!-- ### Throttling zadar topic ### -->
+    <node name="zadar_throttler" type="throttle" pkg="topic_tools" args="messages /zadar/scan0 4.0 /zadar/scan0_throttled" />
     
     <!-- ### Play bag ### -->
-    <param name="use_sim_time" value="false"/>
+    <param name="use_sim_time" value="true"/>
     <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg path_to_bag) --clock" output="screen" />
     
     <!-- ### Launch RIO ### -->
@@ -26,7 +29,7 @@
         <param name="queue_size" value="$(arg rio_queue_size)"/>
         <param name="odom_frame_id" value="$(arg rio_odom_frame_id)"/>
         <!-- Instead of remapping, this is already built-in! -->
-        <param name="radar_topic" value="/zadar/scan0"/>    
+        <param name="radar_topic" value="/zadar/scan0_throttled"/>    
         <!-- Alternatively to line above: Remapping topic -->
         <!-- <remap from="/radar/cfar_detections" to="/zadar/scan0"/> -->
     </node>
