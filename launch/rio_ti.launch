@@ -1,14 +1,13 @@
 <launch>
     <!-- ### Params ### -->
-    <arg name="path_to_bag"/>
-    <arg name="radar_frame_id" default="awr1843aop"/>
+    <arg name="path"/>
+    <arg name="filename"/>
     <arg name="ti_radar" default="true"/>
     <arg name="record" default="false"/>
-    <arg name="save_name" default="my_bag"/>
     
     <!-- ### Play bag ### -->
     <param name="use_sim_time" value="true"/>
-    <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg path_to_bag) --clock" output="screen" />
+    <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg path)/$(arg filename) --clock" output="screen" />
     
     <!-- ### Launch RIO ### -->
     <arg name="nodelet_manager_on" default="true" />
@@ -16,6 +15,7 @@
 
     <arg name="rio_queue_size" default="1" />
     <arg name="rio_odom_frame_id" default="radar" />
+    <arg name="radar_frame_id" default="awr1843aop"/>
     <arg name="cam_frame_id" default="cam" />
     <arg name="imu_frame_id" default="bmi088" />
 
@@ -35,7 +35,7 @@
 
     <!-- ### Record ### -->
     <group if="$(arg record)">
-        <arg name="output_dir" default="$(find radar_rig_sensor_fusion)/bag/RIO/RIO_TI_$(arg save_name)" />
+        <arg name="output_dir" default="$(arg path)/RIO_TI_$(arg filename)" />
         <node name="rosbag_record" pkg="rosbag" type="record" args="-a -O $(arg output_dir)" output="screen" />
     </group>
 </launch>

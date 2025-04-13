@@ -5,7 +5,7 @@
     <arg name="record" default="false"/>
 
     <!-- Play ROS bag -->
-    <param name="use_sim_time" value="false"/>
+    <param name="use_sim_time" value="true"/>
     <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg bag_file) --clock" output="screen" />
 
     <!-- ### Launch RIO ### -->

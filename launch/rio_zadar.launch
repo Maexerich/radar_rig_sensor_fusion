@@ -1,17 +1,16 @@
 <launch>
     <!-- ### Params ### -->
-    <arg name="path_to_bag"/>
-    <arg name="radar_frame_id" default="zadar"/>
+    <arg name="path"/>
+    <arg name="filename"/>
     <arg name="zadar_radar" default="true"/>
     <arg name="record" default="false"/>
-    <arg name="save_name" default="my_bag"/>
 
     <!-- ### Throttling zadar topic ### -->
-    <node name="zadar_throttler" type="throttle" pkg="topic_tools" args="messages /zadar/scan0 4.0 /zadar/scan0_throttled" />
+    <node name="zadar_throttler" type="throttle" pkg="topic_tools" args="messages /zadar/scan0 5.0 /zadar/scan0_throttled" />
     
     <!-- ### Play bag ### -->
     <param name="use_sim_time" value="true"/>
-    <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg path_to_bag) --clock" output="screen" />
+    <node name="rosbag_play" pkg="rosbag" type="play" args="$(arg path)/$(arg filename) --clock" output="screen" />
     
     <!-- ### Launch RIO ### -->
     <arg name="nodelet_manager_on" default="true" />
@@ -19,6 +18,7 @@
 
     <arg name="rio_queue_size" default="1" />
     <arg name="rio_odom_frame_id" default="radar" />
+    <arg name="radar_frame_id" default="zadar"/>
     <arg name="cam_frame_id" default="cam" />
     <arg name="imu_frame_id" default="bmi088" />
 
@@ -28,20 +28,19 @@
         <rosparam file="$(find rio)/cfg/rio.yaml" />
         <param name="queue_size" value="$(arg rio_queue_size)"/>
         <param name="odom_frame_id" value="$(arg rio_odom_frame_id)"/>
-        <!-- Instead of remapping, this is already built-in! -->
-        <param name="radar_topic" value="/zadar/scan0_throttled"/>    
+   
         <!-- Alternatively to line above: Remapping topic -->
-        <!-- <remap from="/radar/cfar_detections" to="/zadar/scan0"/> -->
+        <remap from="/radar/cfar_detections" to="/zadar/scan0_throttled"/>
     </node>
 
     <!-- Rigid Body transformations -->
     <group if ="$(arg zadar_radar)">
-        <node name="imu_to_Zadarradar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.0 0.1018 0.0 0.71 0.0 0.71 0.0 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
+        <node name="imu_to_Zadarradar_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="0.0 0.1018 0.011 0.71 0.0 0.71 0.0 '$(arg imu_frame_id)' '$(arg radar_frame_id)'" />
     </group>
 
     <!-- ### Record ### -->
     <group if="$(arg record)">
-        <arg name="output_dir" default="$(find radar_rig_sensor_fusion)/bag/RIO/RIO_ZADAR_$(arg save_name)" />
+        <arg name="output_dir" default="$(arg path)/RIO_ZADAR_$(arg filename)" />
         <node name="rosbag_record" pkg="rosbag" type="record" args="-a -O $(arg output_dir)" output="screen" />
     </group>
 </launch>
