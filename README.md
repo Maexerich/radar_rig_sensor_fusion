@@ -125,8 +125,3 @@ sudo chmod 666 /dev/ttyUSB0 /dev/ttyUSB1
 
 ## ZadarLabs ZPrime: Initial Setup on Jetson
 Follow guide at [ZadarLabs ARM ROS1](https://github.com/Maexerich/zadarlabs_arm_ros1).
-
-# Datasets
-% TODO %
-# Evaluation
-% TODO %
